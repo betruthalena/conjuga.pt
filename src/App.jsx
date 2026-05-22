@@ -4,11 +4,18 @@ import './App.css'
 
 const TENSES = ['Presente', 'Pretérito Perfeito', 'Imperativo Afirmativo']
 const MODES = ['All', 'Regular', 'Irregular']
-const TENSE_SHORT = {
-  'Presente': 'Presente',
-  'Pretérito Perfeito': 'Perfeito',
-  'Imperativo Afirmativo': 'Imperativo',
-}
+
+const TENSE_CONFIG = [
+  { label: 'Presente',  short: 'Presente',  icon: '☀️' },
+  { label: 'Pretérito Perfeito', short: 'Perfeito', icon: '📖' },
+  { label: 'Imperativo Afirmativo', short: 'Imperativo', icon: '⚡️' },
+]
+
+const MODE_CONFIG = [
+  { label: 'All',       icon: '∞' },
+  { label: 'Regular',   icon: '◆' },
+  { label: 'Irregular', icon: '★' },
+]
 
 function removeDiacritics(str) {
   return str
@@ -98,46 +105,41 @@ export default function App() {
           <div className="logo-sub">European Portuguese · active recall drills</div>
         </header>
 
-        <div className="card">
-          <div className="section-label">Tempo verbal</div>
-          <div className="pill-row">
-            {TENSES.map((t, i) => (
-              <button
-                key={t}
-                className={`pill${tense === t ? ` active tense-${i}` : ''}`}
-                onClick={() => setTense(t)}
-              >
-                {TENSE_SHORT[t]}
-              </button>
-            ))}
-          </div>
+        <div className="section-label">Tempo verbal</div>
+        <div className="tense-grid">
+          {TENSE_CONFIG.map((t, i) => (
+            <button
+              key={t.label}
+              className={`tense-card${tense === t.label ? ` active t${i}` : ''}`}
+              onClick={() => setTense(t.label)}
+            >
+              <span className="card-icon">{t.icon}</span>
+              {t.short}
+            </button>
+          ))}
         </div>
 
-        <div className="card">
-          <div className="section-label">Verbos</div>
-          <div className="pill-row">
-            {MODES.map(m => (
-              <button
-                key={m}
-                className={`pill${mode === m ? ' active mode' : ''}`}
-                onClick={() => setMode(m)}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
+        <div className="section-label">Verbos</div>
+        <div className="mode-grid">
+          {MODE_CONFIG.map(m => (
+            <button
+              key={m.label}
+              className={`mode-card${mode === m.label ? ' active' : ''}`}
+              onClick={() => setMode(m.label)}
+            >
+              {m.label}
+            </button>
+          ))}
         </div>
 
-        <div className="card">
-          <button className="start-btn" onClick={startDrill} disabled={!pool.length}>
-            Começar →
-          </button>
-          {pool.length > 0 && (
-            <div className="count-badge">
-              <strong>{pool.length}</strong> formas disponíveis
-            </div>
-          )}
-        </div>
+        <button className="start-btn" onClick={startDrill} disabled={!pool.length}>
+          Começar →
+        </button>
+        {pool.length > 0 && (
+          <div className="count-badge">
+            <strong>{pool.length}</strong> formas disponíveis
+          </div>
+        )}
       </div>
     )
   }
@@ -155,7 +157,7 @@ export default function App() {
             <div className="streak">🔥 {stats.streak}</div>
           )}
           <div className="progress-stat">
-            <strong>{stats.correct}</strong>/{stats.total} corretas
+            <strong>{stats.correct}</strong>/{stats.total}
           </div>
         </div>
       </div>

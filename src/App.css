@@ -8,7 +8,7 @@
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: #4A90C4;
+  background: #1B3A5C;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -17,9 +17,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-#root {
-  width: 100%;
-}
+#root { width: 100%; }
 
 /* ── Layout ─────────────────────────────────────────────────── */
 
@@ -33,7 +31,7 @@ body {
 
 .logo {
   text-align: center;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .logo-mark {
@@ -44,13 +42,11 @@ body {
   letter-spacing: -0.5px;
 }
 
-.logo-mark span {
-  color: #FFD93D;
-}
+.logo-mark span { color: #FFD93D; }
 
 .logo-sub {
   font-size: 11px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.5);
   letter-spacing: 0.8px;
   text-transform: uppercase;
   margin-top: 5px;
@@ -63,8 +59,8 @@ body {
   font-weight: 700;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 10px;
 }
 
 /* ── Tense cards ─────────────────────────────────────────────── */
@@ -73,20 +69,19 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .tense-card {
-  border-radius: 18px;
-  padding: 16px 10px;
+  border-radius: 16px;
+  padding: 18px 10px;
   cursor: pointer;
-  border: none;
+  border: 2px solid transparent;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(0,0,0,0.55);
-  background: rgba(255,255,255,0.25);
-  backdrop-filter: blur(4px);
+  color: #fff;
+  background: #2A4F78;
   transition: all 0.15s ease;
   display: flex;
   flex-direction: column;
@@ -97,18 +92,18 @@ body {
 }
 
 .tense-card:hover {
-  background: rgba(255,255,255,0.35);
-  color: rgba(0,0,0,0.7);
+  background: #335D8A;
 }
 
 .tense-card.active {
-  color: #fff;
+  border-color: transparent;
   transform: translateY(-2px);
+  color: #1B3A5C;
 }
 
-.tense-card.active.t0 { background: #FF6B6B; }
-.tense-card.active.t1 { background: #4ECDC4; }
-.tense-card.active.t2 { background: #FFD93D; color: #1A1A1A; }
+.tense-card.active.t0 { background: #FF6B6B; color: #fff; }
+.tense-card.active.t1 { background: #4ECDC4; color: #fff; }
+.tense-card.active.t2 { background: #FFD93D; color: #1B3A5C; }
 
 .tense-card .card-icon {
   font-size: 22px;
@@ -121,31 +116,28 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .mode-card {
-  border-radius: 18px;
+  border-radius: 16px;
   padding: 14px 10px;
   cursor: pointer;
-  border: none;
+  border: 2px solid transparent;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  color: rgba(255,255,255,0.75);
-  background: rgba(255,255,255,0.18);
+  color: #fff;
+  background: #2A4F78;
   transition: all 0.15s ease;
   text-align: center;
 }
 
-.mode-card:hover {
-  background: rgba(255,255,255,0.28);
-  color: #fff;
-}
+.mode-card:hover { background: #335D8A; }
 
 .mode-card.active {
   background: #fff;
-  color: #1A1A1A;
+  color: #1B3A5C;
   transform: translateY(-2px);
 }
 
@@ -154,28 +146,31 @@ body {
 .start-btn {
   width: 100%;
   padding: 18px;
-  border-radius: 18px;
+  border-radius: 16px;
   border: none;
   background: #FFD93D;
-  color: #1A1A1A;
+  color: #1B3A5C;
   font-family: 'DM Sans', sans-serif;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
-  letter-spacing: 0.2px;
 }
 
 .start-btn:hover  { background: #FFC107; }
 .start-btn:active { transform: scale(0.98); }
-.start-btn:disabled { background: rgba(255,255,255,0.25); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+.start-btn:disabled {
+  background: #2A4F78;
+  color: rgba(255,255,255,0.3);
+  cursor: not-allowed;
+}
 
 .count-badge {
-  background: rgba(255,255,255,0.18);
+  background: #2A4F78;
   border-radius: 10px;
   padding: 8px 12px;
   font-size: 13px;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.6);
   text-align: center;
   margin-top: 10px;
 }
@@ -194,23 +189,23 @@ body {
 .stats-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .back-btn {
-  background: rgba(255,255,255,0.2);
+  background: #2A4F78;
   border: none;
   color: #fff;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 50px;
   transition: background 0.15s;
 }
 
-.back-btn:hover { background: rgba(255,255,255,0.3); }
+.back-btn:hover { background: #335D8A; }
 
 .streak {
   font-size: 14px;
@@ -220,13 +215,14 @@ body {
 
 .progress-stat {
   font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  background: rgba(255,255,255,0.18);
-  padding: 6px 12px;
+  color: #fff;
+  background: #2A4F78;
+  padding: 7px 14px;
   border-radius: 50px;
+  font-weight: 500;
 }
 
-.progress-stat strong { color: #fff; }
+.progress-stat strong { color: #FFD93D; }
 
 /* ── Drill card ──────────────────────────────────────────────── */
 
@@ -252,15 +248,15 @@ body {
 }
 
 .drill-tense.t0 { background: #FFF0F0; color: #FF6B6B; }
-.drill-tense.t1 { background: #F0FAFA; color: #4ECDC4; }
-.drill-tense.t2 { background: #FFFBEA; color: #E6A800; }
+.drill-tense.t1 { background: #F0FAFA; color: #2BB5AC; }
+.drill-tense.t2 { background: #FFFBEA; color: #C8960C; }
 
 .drill-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: currentColor;
-  opacity: 0.7;
+  opacity: 0.8;
   flex-shrink: 0;
 }
 
@@ -270,7 +266,7 @@ body {
   font-family: 'DM Mono', monospace;
   font-size: 46px;
   font-weight: 500;
-  color: #1A1A1A;
+  color: #1B3A5C;
   line-height: 1;
   margin-bottom: 8px;
   letter-spacing: -1.5px;
@@ -283,7 +279,7 @@ body {
 }
 
 .person-display strong {
-  color: #1A1A1A;
+  color: #1B3A5C;
   font-weight: 600;
 }
 
@@ -293,17 +289,17 @@ body {
   width: 100%;
   padding: 15px 20px;
   border-radius: 14px;
-  border: 2px solid #EEE;
-  background: #FAFAFA;
+  border: 2px solid #E8E8E8;
+  background: #F8F8F8;
   font-family: 'DM Mono', monospace;
   font-size: 22px;
   font-weight: 500;
-  color: #1A1A1A;
+  color: #1B3A5C;
   outline: none;
   transition: border-color 0.15s, background 0.15s;
 }
 
-.input-field:focus     { border-color: #4A90C4; background: #fff; }
+.input-field:focus     { border-color: #1B3A5C; background: #fff; }
 .input-field.correct   { border-color: #4ECDC4; background: #F0FAFA; }
 .input-field.wrong     { border-color: #FF6B6B; background: #FFF0F0; }
 .input-field.diacritic { border-color: #FFD93D; background: #FFFBEA; }
@@ -324,13 +320,13 @@ body {
   transition: background 0.15s, transform 0.1s;
 }
 
-.check-btn          { background: #FFD93D; color: #1A1A1A; }
+.check-btn          { background: #FFD93D; color: #1B3A5C; }
 .check-btn:hover    { background: #FFC107; }
 .check-btn:active   { transform: scale(0.98); }
 .check-btn:disabled { background: #F0F0F0; color: #ccc; cursor: not-allowed; }
 
-.next-btn        { background: #4A90C4; color: #fff; }
-.next-btn:hover  { background: #3A7AB0; }
+.next-btn        { background: #1B3A5C; color: #fff; }
+.next-btn:hover  { background: #2A4F78; }
 .next-btn:active { transform: scale(0.98); }
 
 /* ── Feedback box ────────────────────────────────────────────── */
@@ -341,22 +337,22 @@ body {
   margin-top: 16px;
 }
 
-.feedback-box.correct   { background: #F0FAFA; border: 1.5px solid #4ECDC4; }
-.feedback-box.wrong     { background: #FFF0F0; border: 1.5px solid #FF6B6B; }
-.feedback-box.diacritic { background: #FFFBEA; border: 1.5px solid #FFD93D; }
+.feedback-box.correct   { background: #F0FAFA; border: 2px solid #4ECDC4; }
+.feedback-box.wrong     { background: #FFF0F0; border: 2px solid #FF6B6B; }
+.feedback-box.diacritic { background: #FFFBEA; border: 2px solid #FFD93D; }
 
-.feedback-icon  { font-size: 22px; margin-bottom: 4px; }
+.feedback-icon { font-size: 22px; margin-bottom: 4px; }
 
 .feedback-label { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
 .feedback-box.correct   .feedback-label { color: #2BB5AC; }
 .feedback-box.wrong     .feedback-label { color: #FF6B6B; }
-.feedback-box.diacritic .feedback-label { color: #E6A800; }
+.feedback-box.diacritic .feedback-label { color: #C8960C; }
 
 .feedback-answer {
   font-family: 'DM Mono', monospace;
   font-size: 22px;
   font-weight: 500;
-  color: #1A1A1A;
+  color: #1B3A5C;
   margin: 4px 0;
 }
 
@@ -370,7 +366,7 @@ body {
 .user-answer {
   font-family: 'DM Mono', monospace;
   font-weight: 500;
-  color: #1A1A1A;
+  color: #1B3A5C;
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */

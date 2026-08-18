@@ -1,14 +1,6 @@
-import { useState, useRef } from 'react'
-import verbsData from './verbs.json'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import { fetchDrillData, filterVerbs, TENSE_CONFIG, TENSES, MODE_CONFIG } from './verbsRepository'
 import './App.css'
-
-const TENSES = ['Presente', 'Pretérito Perfeito', 'Imperativo Afirmativo']
-const MODES = ['All', 'Regular', 'Irregular']
-const TENSE_SHORT = {
-  'Presente': 'Presente',
-  'Pretérito Perfeito': 'Perfeito',
-  'Imperativo Afirmativo': 'Imperativo',
-}
 
 function removeDiacritics(str) {
   return str
@@ -16,16 +8,6 @@ function removeDiacritics(str) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/ç/g, 'c')
     .replace(/Ç/g, 'C')
-}
-
-function filterVerbs(tense, mode) {
-  const groupMap = {
-    Regular: ['ar', 'er', 'ir', 'orthographic'],
-    Irregular: ['irregular'],
-    All: ['ar', 'er', 'ir', 'orthographic', 'irregular'],
-  }
-  const allowed = groupMap[mode]
-  return verbsData.filter(v => v.tense === tense && allowed.includes(v.group))
 }
 
 function pickRandom(arr, exclude) {
@@ -47,7 +29,29 @@ export default function App() {
   const [stats, setStats] = useState({ correct: 0, total: 0, streak: 0 })
   const inputRef = useRef(null)
 
-  const pool = filterVerbs(tense, mode)
+  const [verbsData, setVerbsData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setLoadError(null)
+    fetchDrillData()
+      .then(data => {
+        if (!cancelled) setVerbsData(data)
+      })
+      .catch(err => {
+        console.error(err)
+        if (!cancelled) setLoadError('Não foi possível carregar os verbos. Tenta novamente.')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [])
+
+  const pool = useMemo(() => filterVerbs(verbsData, tense, mode), [verbsData, tense, mode])
 
   function nextQuestion(prev) {
     const q = pickRandom(pool, prev)
@@ -90,6 +94,38 @@ export default function App() {
 
   const tenseIdx = TENSES.indexOf(tense)
 
+  if (loading) {
+    return (
+      <div className="app">
+        <header className="logo">
+          <div className="logo-mark">conjuga<span>.pt</span></div>
+          <div className="logo-sub">European Portuguese · active recall drills</div>
+        </header>
+        <div className="card">
+          <div className="section-label">A carregar verbos…</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (loadError) {
+    return (
+      <div className="app">
+        <header className="logo">
+          <div className="logo-mark">conjuga<span>.pt</span></div>
+          <div className="logo-sub">European Portuguese · active recall drills</div>
+        </header>
+        <div className="card">
+          <div className="section-label">Erro</div>
+          <p style={{ color: '#FF6B6B', marginBottom: 16 }}>{loadError}</p>
+          <button className="start-btn" onClick={() => window.location.reload()}>
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (screen === 'home') {
     return (
       <div className="app">
@@ -98,46 +134,44 @@ export default function App() {
           <div className="logo-sub">European Portuguese · active recall drills</div>
         </header>
 
-        <div className="card">
-          <div className="section-label">Tempo verbal</div>
-          <div className="pill-row">
-            {TENSES.map((t, i) => (
-              <button
-                key={t}
-                className={`pill${tense === t ? ` active tense-${i}` : ''}`}
-                onClick={() => setTense(t)}
-              >
-                {TENSE_SHORT[t]}
-              </button>
-            ))}
-          </div>
+        <div className="section-label">Tempo verbal</div>
+        <div className="tense-grid">
+          {TENSE_CONFIG.map((t, i) => (
+            <button
+              key={t.label}
+              className={`tense-card${tense === t.label ? ` active t${i}` : ''}`}
+              onClick={() => setTense(t.label)}
+            >
+              <span className="card-icon">{t.icon}</span>
+              {t.short}
+            </button>
+          ))}
         </div>
 
-        <div className="card">
-          <div className="section-label">Verbos</div>
-          <div className="pill-row">
-            {MODES.map(m => (
-              <button
-                key={m}
-                className={`pill${mode === m ? ' active mode' : ''}`}
-                onClick={() => setMode(m)}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
+        <div className="section-label">Verbos</div>
+        <div className="mode-grid">
+          {MODE_CONFIG.map(m => (
+            <button
+              key={m.label}
+              className={`mode-card${mode === m.label ? ' active' : ''}`}
+              onClick={() => setMode(m.label)}
+            >
+              {m.label}
+            </button>
+          ))}
         </div>
 
-        <div className="card">
-          <button className="start-btn" onClick={startDrill} disabled={!pool.length}>
-            Começar →
-          </button>
-          {pool.length > 0 && (
-            <div className="count-badge">
-              <strong>{pool.length}</strong> formas disponíveis
-            </div>
-          )}
-        </div>
+        <button className="start-btn" onClick={startDrill} disabled={!pool.length}>
+          Começar →
+        </button>
+        {pool.length > 0 && (
+          <div className="count-badge">
+            <strong>{pool.length}</strong> formas disponíveis
+          </div>
+        )}
+        {pool.length === 0 && (
+          <div className="count-badge">Sem formas para esta combinação</div>
+        )}
       </div>
     )
   }
@@ -155,7 +189,7 @@ export default function App() {
             <div className="streak">🔥 {stats.streak}</div>
           )}
           <div className="progress-stat">
-            <strong>{stats.correct}</strong>/{stats.total} corretas
+            <strong>{stats.correct}</strong>/{stats.total}
           </div>
         </div>
       </div>
